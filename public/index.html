@@ -4,33 +4,41 @@
     <title>YouTube Downloader</title>
     <style>
         body { font-family: Arial, sans-serif; max-width: 600px; margin: 50px auto; padding: 20px; }
-        input, button { padding: 15px; margin: 10px 0; width: 100%; font-size: 16px; }
+        input, button { padding: 15px; margin: 10px 0; width: 100%; font-size: 16px; box-sizing: border-box; }
         button { background: #ff0000; color: white; border: none; cursor: pointer; border-radius: 5px; }
         button:hover { background: #cc0000; }
+        .result { margin-top: 20px; padding: 15px; background: #f0f0f0; border-radius: 5px; }
     </style>
 </head>
 <body>
-    <h1>YouTube Downloader</h1>
+    <h1>YouTube Video Downloader</h1>
     <input type="url" id="url" placeholder="Paste YouTube URL here">
     <button onclick="download()">Download Video</button>
+    <div id="result"></div>
     
     <script>
     function download() {
         const url = document.getElementById('url').value;
+        const result = document.getElementById('result');
+        
         if (!url) {
-            alert('Please enter a YouTube URL');
+            result.innerHTML = '<div class="result" style="color: red;">Please enter a YouTube URL</div>';
             return;
         }
         
-        // Extract video ID from YouTube URL
+        // Extract video ID
         const videoId = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/);
         if (!videoId) {
-            alert('Invalid YouTube URL');
+            result.innerHTML = '<div class="result" style="color: red;">Invalid YouTube URL</div>';
             return;
         }
         
-        // Use y2mate.com for downloading
-        window.open('https://www.y2mate.com/youtube/' + videoId[1], '_blank');
+        result.innerHTML = '<div class="result">Redirecting to download page...</div>';
+        
+        // Redirect to working download service
+        setTimeout(() => {
+            window.open('https://yt1s.com/en/youtube-to-mp4?q=' + encodeURIComponent(url), '_blank');
+        }, 1000);
     }
     </script>
 </body>
