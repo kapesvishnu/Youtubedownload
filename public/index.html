@@ -49,7 +49,16 @@
         setTimeout(() => {
             const videoId = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/);
             if (videoId) {
-                result.innerHTML = '<div class="result"><h3>✅ Ready for Download!</h3><p>Video processed successfully</p></div>';
+                result.innerHTML = `
+                    <div class="result">
+                        <h3>✅ Choose Download Option:</h3>
+                        <div style="display: grid; gap: 10px; margin-top: 15px;">
+                            <button onclick="window.open('https://savefrom.net/#url=' + encodeURIComponent('${url}'), '_blank')" style="padding: 10px; background: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer;">Download via SaveFrom</button>
+                            <button onclick="window.open('https://www.y2mate.com/download-youtube/' + encodeURIComponent('${url}'), '_blank')" style="padding: 10px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">Download via Y2mate</button>
+                            <button onclick="window.open('https://yt1s.com/en/youtube-to-mp4?q=' + encodeURIComponent('${url}'), '_blank')" style="padding: 10px; background: #6f42c1; color: white; border: none; border-radius: 5px; cursor: pointer;">Download via YT1s</button>
+                        </div>
+                    </div>
+                `;
             }
         }, 2000);
     }
