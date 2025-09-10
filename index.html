@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Downloader</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .container { background: #f5f5f5; padding: 30px; border-radius: 10px; }
+        input, select, button { padding: 10px; margin: 10px 0; width: 100%; box-sizing: border-box; }
+        button { background: #ff0000; color: white; border: none; cursor: pointer; }
+        button:hover { background: #cc0000; }
+        .status { margin-top: 20px; padding: 10px; border-radius: 5px; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>YouTube Video Downloader</h1>
+        <form id="downloadForm">
+            <input type="url" id="videoUrl" placeholder="Paste YouTube URL here" required>
+            
+            <select id="quality">
+                <option value="best">Best Quality (1080p+)</option>
+                <option value="720p">High Quality (720p)</option>
+                <option value="480p">Medium Quality (480p)</option>
+                <option value="360p">Low Quality (360p)</option>
+            </select>
+            
+            <select id="language">
+                <option value="original">Original Audio</option>
+                <option value="telugu">Telugu Translation</option>
+                <option value="english">English Translation</option>
+            </select>
+            
+            <button type="submit">Download Video</button>
+        </form>
+        
+        <div id="status"></div>
+    </div>
+
+    <script>
+        document.getElementById('downloadForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const url = document.getElementById('videoUrl').value;
+            const quality = document.getElementById('quality').value;
+            const language = document.getElementById('language').value;
+            const status = document.getElementById('status');
+            
+            status.innerHTML = '<div class="status">Processing download...</div>';
+            
+            try {
+                const response = await fetch('/download', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        url, 
+                        quality, 
+                        telugu: language === 'telugu'
+                    })
+                });
+                
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const downloadUrl = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = downloadUrl;
+                    a.download = 'video.mp4';
+                    a.click();
+                    status.innerHTML = '<div class="status success">Download completed!</div>';
+                } else {
+                    const error = await response.text();
+                    status.innerHTML = `<div class="status error">Error: ${error}</div>`;
+                }
+            } catch (error) {
+                status.innerHTML = `<div class="status error">Error: ${error.message}</div>`;
+            }
+        });
+    </script>
+</body>
+</html>
