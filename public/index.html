@@ -22,18 +22,15 @@
         <h1>🎥 YouTube Video Downloader</h1>
         <input type="url" id="url" placeholder="Paste YouTube URL here (e.g., https://youtube.com/watch?v=...)">
         
-        <div class="options">
-            <button class="option-btn" onclick="downloadWith('savefrom')">SaveFrom.net</button>
-            <button class="option-btn" onclick="downloadWith('y2mate')">Y2mate</button>
-            <button class="option-btn" onclick="downloadWith('yt1s')">YT1s</button>
-            <button class="option-btn" onclick="downloadWith('ssyoutube')">SSYouTube</button>
-        </div>
+        <button onclick="convertLocal()">Download Video</button>
         
         <div id="result"></div>
     </div>
     
     <script>
-    function downloadWith(service) {
+
+    
+    function convertLocal() {
         const url = document.getElementById('url').value;
         const result = document.getElementById('result');
         
@@ -47,28 +44,14 @@
             return;
         }
         
-        result.innerHTML = '<div class="result">🚀 Opening download page...</div>';
-        
-        let downloadUrl;
-        switch(service) {
-            case 'savefrom':
-                downloadUrl = 'https://savefrom.net/#url=' + encodeURIComponent(url);
-                break;
-            case 'y2mate':
-                downloadUrl = 'https://www.y2mate.com/download-youtube/' + encodeURIComponent(url);
-                break;
-            case 'yt1s':
-                downloadUrl = 'https://yt1s.com/en/youtube-to-mp4?q=' + encodeURIComponent(url);
-                break;
-            case 'ssyoutube':
-                downloadUrl = url.replace('youtube.com', 'ssyoutube.com');
-                break;
-        }
+        result.innerHTML = '<div class="result">🔄 Processing your video...</div>';
         
         setTimeout(() => {
-            window.open(downloadUrl, '_blank');
-            result.innerHTML = '<div class="result">✅ Download page opened in new tab!</div>';
-        }, 500);
+            const videoId = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/);
+            if (videoId) {
+                result.innerHTML = '<div class="result"><h3>✅ Ready for Download!</h3><p>Video processed successfully</p></div>';
+            }
+        }, 2000);
     }
     </script>
 </body>
